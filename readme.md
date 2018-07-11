@@ -1,6 +1,4 @@
 # LDSO: Direct Sparse Odometry with Loop Closure
-![LDSO](./attachments/fig1.pdf)
-
 ### 1. Related Ppaers
 * **LDSO: Direct Sparse Odometry with Loop Closure**, X. Gao, R. Wang, N. Demmel, D. Cremers, In International Conference on Intelligent Robots and Systems (IROS), 2018.
 * **Direct Sparse Odometry**, *J. Engel, V. Koltun, D. Cremers*, In arXiv:1607.02565, 2016
