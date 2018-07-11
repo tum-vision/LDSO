@@ -4,20 +4,20 @@
 * **Direct Sparse Odometry**, *J. Engel, V. Koltun, D. Cremers*, In arXiv:1607.02565, 2016
 * **A Photometrically Calibrated Benchmark For Monocular Visual Odometry**, *J. Engel, V. Usenko, D. Cremers*, In arXiv:1607.02555, 2016
 
-# minimal instructions for compilation and running
-## dependencies
-### libraries in Ubuntu
+# Minimal instructions for compilation and running
+## Dependencies
+### Libraries in Ubuntu
 ```./install_dependencies.sh```
 This will help you install the needed libraries in Ubuntu 16.04 and later, including eigen, glog, opencv, libzip, etc.
-### other libraries
+### Other libraries
  - install [Pangolin](https://github.com/stevenlovegrove/Pangolin) for visualization. 
 
-## compile
+## Compile
 ```./make_project.sh```
 
 This will build the thirdparty library and also ldso library for you. You can also follow the steps in this sh file (will compile DBoW3 and g2o first, and the ldso). 
 
-## run  
+## Run  
 We provide examples on three datasets. TUM-Mono: [https://vision.in.tum.de/mono-dataset](https://vision.in.tum.de/mono-dataset), Kitti: [Kitti odometry](http://www.cvlibs.net/datasets/kitti/eval_odometry.php), and EUROC: [Euroc MAV dataset](https://projects.asl.ethz.ch/datasets/doku.php?id=kmavvisualinertialdatasets). You can also write your own executable programs on your camera. 
 
 After compilation, in **bin** directory there will be three executables like run_dso_xxx. You can either specify the directories in the source file like examples/run_dso_xxx.cc, or pass them as command line parameters. For example, if you want to run ldso on Kitti dataset and use sequence 00, please change the paths in examples/run_dso_xxx.cc like:
