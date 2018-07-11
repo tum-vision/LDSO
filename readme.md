@@ -1,4 +1,6 @@
 # LDSO: Direct Sparse Odometry with Loop Closure
+![LDSO](./attachments/fig1.pdf)
+
 ### 1. Related Ppaers
 * **LDSO: Direct Sparse Odometry with Loop Closure**, X. Gao, R. Wang, N. Demmel, D. Cremers, In International Conference on Intelligent Robots and Systems (IROS), 2018.
 * **Direct Sparse Odometry**, *J. Engel, V. Koltun, D. Cremers*, In arXiv:1607.02565, 2016
@@ -33,13 +35,13 @@ and then you will see a window showing the status of the program. Do the same fo
 
 Or, if you don't want to change the code, just call the executables like DSO: 
 
-bin/run_dso_tum_mono \
+```bin/run_dso_tum_mono \
 			files=XXXXX/sequence_XX/images.zip \
 			calib=XXXXX/sequence_XX/camera.txt \
 			gamma=XXXXX/sequence_XX/pcalib.txt \
 			vignette=XXXXX/sequence_XX/vignette.png \
 			preset=0 \
-			mode=0 
+			mode=0 ```
 
 ## Notes
  - LDSO is a monocular VO based on DSO with Sim(3) loop closing function. Note we still can not know the real scale of mono-slam. We only make it more consistent in long trajectories. 
