@@ -1,5 +1,5 @@
 # LDSO: Direct Sparse Odometry with Loop Closure
-### 1. Related Ppaers
+### 1. Related Papers
 * **LDSO: Direct Sparse Odometry with Loop Closure**, X. Gao, R. Wang, N. Demmel, D. Cremers, In International Conference on Intelligent Robots and Systems (IROS), 2018.
 * **Direct Sparse Odometry**, *J. Engel, V. Koltun, D. Cremers*, In arXiv:1607.02565, 2016
 * **A Photometrically Calibrated Benchmark For Monocular Visual Odometry**, *J. Engel, V. Usenko, D. Cremers*, In arXiv:1607.02555, 2016
@@ -36,7 +36,7 @@ Or, if you don't want to change the code, just call the executables like DSO:
 bin/run_dso_tum_mono files=XXXXX/sequence_XX/images.zip calib=XXXXX/sequence_XX/camera.txt gamma=XXXXX/sequence_XX/pcalib.txt vignette=XXXXX/sequence_XX/vignette.png preset=0 mode=0
 
 ## Notes
- - LDSO is a monocular VO based on DSO with Sim(3) loop closing function. Note we still can not know the real scale of mono-slam. We only make it more consistent in long trajectories. 
+ - LDSO is a monocular VO based on DSO with Sim(3) loop closing function. Note we still **cannot** know the real scale of mono-slam. We only make it more consistent in long trajectories. 
  - The red line in pangolin windows shows the trajectory before loop closing, and the yellow line shows the trajectory after optimization.
  - If you are looking for code instructions, take a look at doc/notes_on_ldso.pdf and see if it can help you.
  - The license of LDSO follows DSO. 
