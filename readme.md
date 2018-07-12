@@ -39,4 +39,7 @@ bin/run_dso_tum_mono files=XXXXX/sequence_XX/images.zip calib=XXXXX/sequence_XX/
  - LDSO is a monocular VO based on DSO with Sim(3) loop closing function. Note we still **cannot** know the real scale of mono-slam. We only make it more consistent in long trajectories. 
  - The red line in pangolin windows shows the trajectory before loop closing, and the yellow line shows the trajectory after optimization.
  - If you are looking for code instructions, take a look at doc/notes_on_ldso.pdf and see if it can help you.
+ - Set setting_enableLoopClosing to true/false to turn on/off loop closing function. setting_fastLoopClosing will record less data and make the loop closing faster.
+ - If you need loop closing, please set setting_pointSelection=1 to make the program compute feature descriptors. If setting_pointSelection=0, the program acts just like DSO, and setting_pointSelection=2 means random point selection, which is faster but unstable. 
+ - Some of the GUI buttons may not work.
  - The license of LDSO follows DSO. 
