@@ -36,7 +36,6 @@ bool prefetch = false;
 float playbackSpeed = 0.5;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
-int mode = 0;
 bool firstRosSpin = false;
 
 using namespace ldso;
@@ -270,8 +269,6 @@ void parseArgument(char *arg) {
     }
 
     if (1 == sscanf(arg, "mode=%d", &option)) {
-
-        mode = option;
         if (option == 0) {
             printf("PHOTOMETRIC MODE WITH CALIBRATION!\n");
         }

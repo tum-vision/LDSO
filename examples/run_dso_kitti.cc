@@ -43,7 +43,6 @@ bool prefetch = false;
 float playbackSpeed = 1;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
-int mode = 1;   // don't use photometric calib by default
 bool firstRosSpin = false;
 
 using namespace ldso;
@@ -255,6 +254,14 @@ void parseArgument(char *arg) {
         return;
     }
 
+    if (1 == sscanf(arg, "mode=%d", &option)) {
+        if (option != 1) {
+            LOG(ERROR) << "EuRoC does not have photometric intrinsics! I will exit!" << endl;
+            exit(-1);
+        }
+        return;
+    }
+
     if (1 == sscanf(arg, "output=%s", &buf)) {
         output_file = buf;
         LOG(INFO) << "output set to " << output_file << endl;
@@ -268,7 +275,6 @@ int main(int argc, char **argv) {
 
     FLAGS_colorlogtostderr = true;
     setting_maxAffineWeight = 0.1;
-    mode = 1;
 
     // check setting conflicts
     if (setting_enableLoopClosing && (setting_pointSelection != 1)) {
@@ -279,6 +285,12 @@ int main(int argc, char **argv) {
 
     for (int i = 1; i < argc; i++)
         parseArgument(argv[i]);
+
+    // Kitti has no photometric calibration
+    printf("PHOTOMETRIC MODE WITHOUT CALIBRATION!\n");
+    setting_photometricCalibration = 0;
+    setting_affineOptModeA = 0; //-1: fix. >=0: optimize (with prior, if > 0).
+    setting_affineOptModeB = 0; //-1: fix. >=0: optimize (with prior, if > 0).
 
     // hook crtl+C.
     thread exThread = thread(exitThread);
