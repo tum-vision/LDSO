@@ -15,6 +15,7 @@ build*
 results/*
 evaluation/results/
 evaluation/matlab-evaluation/**/*.mat
+/results.txt*
 
 # python
 **.pyc
