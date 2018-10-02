@@ -89,7 +89,7 @@ To run LDSO on EuRoC dataset sequence MH_01_easy, execute:
 ```
 ./bin/run_dso_euroc \
     preset=0 \
-    files=XXXX/EuRoC/ MH_01_easy/mav0/cam0/
+    files=XXXX/EuRoC/MH_01_easy/mav0/cam0/
 ```
 
 ## Notes
