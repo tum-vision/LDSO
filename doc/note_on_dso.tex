@@ -29,9 +29,9 @@
 	
 	\section{Introduction on DSO}
 	\subsection{What is DSO}
-	DSO (Direct Sparse Odometry) is a visual odometry system published in 2016 by Dr. Jakob Engel from the Computer Vision Laboratory at the Technical University of Munich (TUM) \cite{engel2017direct}. For the laboratory home page, see \url{https://vision.in.tum.de/research/vslam/dso}. The code link is here: \url{https://github.com/JakobEngel/dso}. For now there are many different versions of DSO like stereo DSO, IMU-integrated DSO, DSO with loop closing, DSO with auto photometric calibration, DSO with rolling shutter camera, etc. Some of them are from our CV group and the others are from public community. Unfortunately, our group only releases the basic DSO version, and if you are interested on stereo DSO or IMU-DSO, please look for other open-source versions in the website, like \url{https://github.com/HorizonAD/stereo_dso}. 
+	DSO (Direct Sparse Odometry) is a visual odometry system published in 2016 by Dr. Jakob Engel from the Computer Vision Laboratory at the Technical University of Munich (TUM) \cite{engel2018direct}. For the laboratory home page, see \url{https://vision.in.tum.de/research/vslam/dso}. The code link is here: \url{https://github.com/JakobEngel/dso}. For now there are many different versions of DSO like stereo DSO, IMU-integrated DSO, DSO with loop closing, DSO with auto photometric calibration, DSO with rolling shutter camera, etc. Some of them are from our CV group and the others are from public community. Unfortunately, our group only releases the basic DSO version, and if you are interested on stereo DSO or IMU-DSO, please look for other open-source versions in the website, like \url{https://github.com/HorizonAD/stereo_dso}. 
 
-	DSO is already well-explained in the paper of \cite{engel2017direct}, however the code of DSO is not very clearly-written compared to other open-source systems like ORB-SLAM2 and SVO (thanks to Jakob), which makes it very difficult for researchers (and me) to conduct follow-up research based on it. This note is to explain some of the basic knowledges about DSO's code, like how it is organized, what is the working pipeline of DSO, etc. 
+	DSO is already well-explained in the paper of \cite{engel2018direct}, however the code of DSO is not very clearly-written compared to other open-source systems like ORB-SLAM2 and SVO (thanks to Jakob), which makes it very difficult for researchers (and me) to conduct follow-up research based on it. This note is to explain some of the basic knowledges about DSO's code, like how it is organized, what is the working pipeline of DSO, etc. 
 	
 	In order to understand this note you should at least have the basic knowledge of visual SLAM, like 3D rigid-body motion and bundle adjustment. You'd better read the DSO's paper at first before reading this material.
 	
@@ -135,7 +135,7 @@
 	\begin{figure}[!thp]
 		\centering
 		\includegraphics[width=0.8\textwidth]{figs/H.jpg}
-		\caption{Arrow-like Hessian matrix in batch BA.}
+		\caption{Arrow-like Hessian matrix in batch BA (image from \cite{engel2018direct})}
 		\label{fig:H-dso}
 	\end{figure}
 		
