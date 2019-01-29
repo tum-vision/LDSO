@@ -123,7 +123,7 @@ namespace ldso {
         fout.write((char *) &id, sizeof(id));
         fout.write((char *) &kfId, sizeof(kfId));
 
-        Mat44 Tcw = Tcw.matrix();
+        Mat44 Tcw = this->Tcw.matrix();
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++)
                 fout.write((char *) &Tcw(i, j), sizeof(double));
@@ -161,7 +161,7 @@ namespace ldso {
             }
 
         this->Tcw = SE3(Tcw);
-        TcwOpti = Sim3(Tcw.matrix());
+        TcwOpti = Sim3(this->Tcw.matrix());
 
         int nufeatures = 0;
         fin.read((char *) &nufeatures, sizeof(int));
