@@ -303,7 +303,7 @@ private:
 
             double stamp = atof(buf);
 
-            if (isnan(stamp))
+            if (std::isnan(stamp))
                 break;
 
             timestamps.push_back(stamp);

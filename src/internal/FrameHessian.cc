@@ -82,8 +82,8 @@ namespace ldso {
                     float dx = 0.5f * (dI_l[idx + 1][0] - dI_l[idx - 1][0]);
                     float dy = 0.5f * (dI_l[idx + wl][0] - dI_l[idx - wl][0]);
 
-                    if (isnan(dx) || std::fabs(dx) > 255.0) dx = 0;
-                    if (isnan(dy) || std::fabs(dy) > 255.0) dy = 0;
+                    if (std::isnan(dx) || std::fabs(dx) > 255.0) dx = 0;
+                    if (std::isnan(dy) || std::fabs(dy) > 255.0) dy = 0;
 
                     dI_l[idx][1] = dx;
                     dI_l[idx][2] = dy;
@@ -94,7 +94,7 @@ namespace ldso {
                         float gw = HCalib->getBGradOnly((float) (dI_l[idx][0]));
                         dabs_l[idx] *=
                                 gw * gw;    // convert to gradient of original color space (before removing response).
-                        // if (isnan(dabs_l[idx])) dabs_l[idx] = 0;
+                        // if (std::isnan(dabs_l[idx])) dabs_l[idx] = 0;
                     }
                 }
             }

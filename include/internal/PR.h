@@ -289,7 +289,7 @@ namespace ldso {
             const VertexSim3 *vSim3 = static_cast<VertexSim3 *> (vertex(0));
             Sim3 Scw = vSim3->estimate();
 
-            if (isnan(Scw.scale())) {
+            if (std::isnan(Scw.scale())) {
                 LOG(INFO) << "Scw has nan: \n" << Scw.matrix() << endl;
                 return;
             }

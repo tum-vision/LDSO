@@ -469,7 +469,7 @@ namespace ldso {
         // decide the inliers
         Sim3 ScrOpti = vSim3->estimate();
 
-        if (ScrOpti.scale() == Scr.scale() || isnan(ScrOpti.scale()) || ScrOpti.scale() < 0)  // optimization failed
+        if (ScrOpti.scale() == Scr.scale() || std::isnan(ScrOpti.scale()) || ScrOpti.scale() < 0)  // optimization failed
             return false;
 
         Scr = ScrOpti;
