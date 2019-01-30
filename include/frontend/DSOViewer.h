@@ -75,6 +75,16 @@ namespace ldso {
 
         shared_ptr<Frame> originFrame = nullptr;
 
+        int numPoints() const {
+            int cnt = 0;
+            for (int i = 0; i < numSparsePoints; ++i) {
+                if (originalInputSparse[i].idpeth > 0) cnt++;
+            }
+            return cnt;
+        }
+
+        void save(ofstream &of);
+
     private:
         float fx, fy, cx, cy;
         float fxi, fyi, cxi, cyi;
@@ -136,6 +146,8 @@ namespace ldso {
             freshAll = true;
         }
 
+        void saveAsPLYFile(const string &file_name);
+
     private:
 
         bool needReset = false;
@@ -148,12 +160,10 @@ namespace ldso {
         bool running = true;
         int w, h;
 
-
         // images rendering
         mutex openImagesMutex;
         MinimalImageB3 *internalVideoImg = nullptr;
         bool videoImgChanged = true;
-
 
         // 3D model rendering
         mutex model3DMutex;

@@ -37,7 +37,6 @@ namespace ldso {
 
     class CoarseDistanceMap;
 
-
     namespace internal {
         class PointFrameResidual;
 
@@ -98,7 +97,7 @@ namespace ldso {
         bool initFailed = false;    // initialization failed?
         bool initialized = false;   // initialized?
         bool linearizeOperation = true; // this is something controls if the optimization runs in a single thread,
-                // but why it is called linerizeOperation...?
+        // but why it is called linerizeOperation...?
 
         shared_ptr<CoarseDistanceMap> GetDistanceMap() {
             return coarseDistanceMap;
@@ -148,8 +147,8 @@ namespace ldso {
          * will call optimizeImmaturePoint in a multi-thread way
          */
         void activatePointsMT_Reductor(
-                std::vector<shared_ptr<PointHessian>> *optimized, std::vector<shared_ptr<ImmaturePoint>> *toOptimize,
-                int min, int max, Vec10 *stats, int tid);
+            std::vector<shared_ptr<PointHessian>> *optimized, std::vector<shared_ptr<ImmaturePoint>> *toOptimize,
+            int min, int max, Vec10 *stats, int tid);
 
         /**
          * optimize an immature point, if the idepth is good, create a map point from this immature point
@@ -161,7 +160,6 @@ namespace ldso {
         shared_ptr<PointHessian>
         optimizeImmaturePoint(shared_ptr<internal::ImmaturePoint> point, int minObs,
                               vector<shared_ptr<ImmaturePointTemporaryResidual>> &residuals);
-
 
         /**
          * add new immature points and their residuals
@@ -239,10 +237,10 @@ namespace ldso {
         void applyRes_Reductor(bool copyJacobians, int min, int max, Vec10 *stats, int tid);
 
         std::vector<VecX> getNullspaces(
-                std::vector<VecX> &nullspaces_pose,
-                std::vector<VecX> &nullspaces_scale,
-                std::vector<VecX> &nullspaces_affA,
-                std::vector<VecX> &nullspaces_affB);
+            std::vector<VecX> &nullspaces_pose,
+            std::vector<VecX> &nullspaces_scale,
+            std::vector<VecX> &nullspaces_affA,
+            std::vector<VecX> &nullspaces_affB);
 
         void setNewFrameEnergyTH();
 

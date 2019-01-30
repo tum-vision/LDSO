@@ -20,10 +20,10 @@
 using namespace std;
 using namespace ldso;
 
-std::string vignette = "/media/Data/Dataset/TUM/Mono/sequence_34/vignette.png";
-std::string gammaCalib = "/media/Data/Dataset/TUM/Mono/sequence_34/pcalib.txt";
-std::string source = "/media/Data/Dataset/TUM/Mono/sequence_34/images.zip";
-std::string calib = "/media/Data/Dataset/TUM/Mono/sequence_34/camera.txt";
+std::string vignette = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/vignette.png";
+std::string gammaCalib = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/pcalib.txt";
+std::string source = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/";
+std::string calib = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/camera.txt";
 std::string output_file = "./results.txt";
 std::string vocPath = "./vocab/orbvoc.dbow3";
 
@@ -31,9 +31,9 @@ double rescale = 1;
 bool reversePlay = false;
 bool disableROS = false;
 int startIdx = 0;
-int endIdx = 10000;
+int endIdx = 400;
 bool prefetch = false;
-float playbackSpeed = 0.5;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
+float playbackSpeed = 0;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
 bool firstRosSpin = false;
@@ -482,6 +482,8 @@ int main(int argc, char **argv) {
         viewer->run();  // mac os should keep this in main thread.
 
     runthread.join();
+
+    viewer->saveAsPLYFile("./pointcloud.ply");
     LOG(INFO) << "EXIT NOW!";
     return 0;
 }

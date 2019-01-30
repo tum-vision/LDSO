@@ -9,7 +9,6 @@
 
 namespace ldso {
 
-
     void KeyFrameDisplay::setFromKF(shared_ptr<FrameHessian> fh, shared_ptr<CalibHessian> HCalib) {
 
         if (fh->frame) {
@@ -54,7 +53,6 @@ namespace ldso {
         }
 
         assert(numSparsePoints <= npoints);
-
 
         needRefresh = true;
     }
@@ -130,8 +128,8 @@ namespace ldso {
     }
 
     bool KeyFrameDisplay::refreshPC(
-            bool canRefresh, float scaledTH, float absTH, int mode, float minBS,
-            int sparsity, bool forceRefresh) {
+        bool canRefresh, float scaledTH, float absTH, int mode, float minBS,
+        int sparsity, bool forceRefresh) {
 
         if (forceRefresh) {
             needRefresh = true;
@@ -178,7 +176,6 @@ namespace ldso {
             if (my_displayMode > 2) continue;
 
             if (originalInputSparse[i].idpeth < 0) continue;
-
 
             float depth = 1.0f / (originalInputSparse[i].idpeth);
             float depth4 = depth * depth;
@@ -293,6 +290,27 @@ namespace ldso {
 
         glPopMatrix();
     }
+
+    void KeyFrameDisplay::save(ofstream &of) {
+        Sophus::Sim3f Swc;
+        if (originFrame) {
+            Swc = originFrame->getPoseOpti().inverse().cast<float>();
+        } else {
+            Swc = camToWorld.cast<float>();
+        }
+
+        for (int i = 0; i < numSparsePoints; ++i) {
+            if (originalInputSparse[i].idpeth <= 0) continue;
+            float depth = 1.0f / (originalInputSparse[i].idpeth);
+
+            float x = (originalInputSparse[i].u * fxi + cxi) * depth;
+            float y = (originalInputSparse[i].v * fyi + cyi) * depth;
+            float z = depth;
+            Vec3f pw = Swc * Vec3f(x, y, z);
+            of << pw[0] << " " << pw[1] << " " << pw[2] << endl;
+        }
+    }
+
     // =================================================================================
 
     PangolinDSOViewer::PangolinDSOViewer(int w, int h, bool startRunThread) {
@@ -328,23 +346,23 @@ namespace ldso {
 
         // 3D visualization
         pangolin::OpenGlRenderState Visualization3D_camera(
-                pangolin::ProjectionMatrix(w, h, 400, 400, w / 2, h / 2, 0.1, 1000),
-                pangolin::ModelViewLookAt(-0, -5, -10, 0, 0, 0, pangolin::AxisNegY)
+            pangolin::ProjectionMatrix(w, h, 400, 400, w / 2, h / 2, 0.1, 1000),
+            pangolin::ModelViewLookAt(-0, -5, -10, 0, 0, 0, pangolin::AxisNegY)
         );
 
         pangolin::View &Visualization3D_display = pangolin::CreateDisplay()
-                .SetBounds(0.0, 1.0, pangolin::Attach::Pix(UI_WIDTH), 1.0, -w / (float) h)
-                .SetHandler(new pangolin::Handler3D(Visualization3D_camera));
+            .SetBounds(0.0, 1.0, pangolin::Attach::Pix(UI_WIDTH), 1.0, -w / (float) h)
+            .SetHandler(new pangolin::Handler3D(Visualization3D_camera));
 
         pangolin::View &d_video = pangolin::Display("imgVideo")
-                .SetAspect(w / (float) h);
+            .SetAspect(w / (float) h);
 
         pangolin::GlTexture texVideo(w, h, GL_RGB, false, 0, GL_RGB, GL_UNSIGNED_BYTE);
 
         pangolin::CreateDisplay()
-                .SetBounds(0.0, 0.3, pangolin::Attach::Pix(UI_WIDTH), 1.0)
-                .SetLayout(pangolin::LayoutEqual)
-                .AddDisplay(d_video);
+            .SetBounds(0.0, 0.3, pangolin::Attach::Pix(UI_WIDTH), 1.0)
+            .SetLayout(pangolin::LayoutEqual)
+            .AddDisplay(d_video);
 
         // parameter reconfigure gui
         pangolin::CreatePanel("ui").SetBounds(0.0, 1.0, 0.0, pangolin::Attach::Pix(UI_WIDTH));
@@ -371,9 +389,7 @@ namespace ldso {
         pangolin::Var<double> settings_absVarTH("ui.absVarTH", 0.001, 1e-10, 1e10, true);
         pangolin::Var<double> settings_minRelBS("ui.minRelativeBS", 0.1, 0, 1, false);
 
-
         pangolin::Var<bool> settings_resetButton("ui.Reset", false, false);
-
 
         pangolin::Var<int> settings_nPts("ui.activePoints", setting_desiredPointDensity, 50, 5000, false);
         pangolin::Var<int> settings_nCandidates("ui.pointCandidates", setting_desiredImmatureDensity, 50, 5000, false);
@@ -528,7 +544,6 @@ namespace ldso {
             setting_render_plotTrackingFull = settings_showFullTracking.Get();
             setting_render_displayCoarseTrackingFull = settings_showCoarseTracking.Get();
 
-
             this->settings_absVarTH = settings_absVarTH.Get();
             this->settings_scaledVarTH = settings_scaledVarTH.Get();
             this->settings_minRelBS = settings_minRelBS.Get();
@@ -539,7 +554,6 @@ namespace ldso {
             setting_maxFrames = settings_nMaxFrames.Get();
             setting_kfGlobalWeight = settings_kfFrequency.Get();
             setting_minGradHistAdd = settings_gradHistAdd.Get();
-
 
             if (settings_resetButton.Get()) {
                 printf("RESET!\n");
@@ -556,11 +570,8 @@ namespace ldso {
             usleep(5000);
         }
 
-
         printf("QUIT Pangolin thread!\n");
         printf("I'll just kill the whole process.\nSo Long, and Thanks for All the Fish!\n");
-
-        exit(1);
     }
 
     void PangolinDSOViewer::close() {
@@ -577,8 +588,8 @@ namespace ldso {
     }
 
     void PangolinDSOViewer::publishKeyframes(
-            std::vector<shared_ptr<Frame>> &frames, bool final,
-            shared_ptr<CalibHessian> HCalib) {
+        std::vector<shared_ptr<Frame>> &frames, bool final,
+        shared_ptr<CalibHessian> HCalib) {
 
         if (!setting_render_display3D) return;
         if (disableAllDisplay) return;
@@ -624,7 +635,7 @@ namespace ldso {
         struct timeval time_now;
         gettimeofday(&time_now, NULL);
         lastNTrackingMs.push_back(
-                ((time_now.tv_sec - last_track.tv_sec) * 1000.0f + (time_now.tv_usec - last_track.tv_usec) / 1000.0f));
+            ((time_now.tv_sec - last_track.tv_sec) * 1000.0f + (time_now.tv_usec - last_track.tv_usec) / 1000.0f));
         if (lastNTrackingMs.size() > 10)
             lastNTrackingMs.pop_front();
 
@@ -639,10 +650,36 @@ namespace ldso {
                 internalVideoImg->data[i][0] =
                 internalVideoImg->data[i][1] =
                 internalVideoImg->data[i][2] =
-                        frame->frameHessian->dI[i][0] * 0.8 > 255.0f ? 255.0 : frame->frameHessian->dI[i][0] * 0.8;
+                    frame->frameHessian->dI[i][0] * 0.8 > 255.0f ? 255.0 : frame->frameHessian->dI[i][0] * 0.8;
             videoImgChanged = true;
         }
+    }
 
+    void PangolinDSOViewer::saveAsPLYFile(const string &file_name) {
+        LOG(INFO) << "save to " << file_name;
+        ofstream fout(file_name);
+        if (!fout) return;
+        unique_lock<mutex> lk3d(model3DMutex);
+
+        // count number of landmarks
+        int cnt_points = 0;
+
+        for (auto kf: keyframes) {
+            cnt_points += kf->numPoints();
+        }
+        // header
+        fout << "ply" << endl << "format ascii 1.0" << endl
+             << "element vertex " << cnt_points << endl
+             << "property float x" << endl
+             << "property float y" << endl
+             << "property float z" << endl
+             << "end_header" << endl;
+
+        for (auto kf: keyframes) {
+            kf->save(fout);
+        }
+        fout.close();
+        cout << "ply file is save to " << file_name << endl;
     }
 
 }

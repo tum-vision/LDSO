@@ -22,20 +22,20 @@ using namespace ldso::internal;
 namespace ldso {
 
     FullSystem::FullSystem(shared_ptr<ORBVocabulary> voc) :
-            coarseDistanceMap(new CoarseDistanceMap(wG[0], hG[0])),
-            coarseTracker(new CoarseTracker(wG[0], hG[0])),
-            coarseTracker_forNewKF(new CoarseTracker(wG[0], hG[0])),
-            coarseInitializer(new CoarseInitializer(wG[0], hG[0])),
-            ef(new EnergyFunctional()),
-            Hcalib(new Camera(fxG[0], fyG[0], cxG[0], cyG[0])),
-            globalMap(new Map(this)),
-            vocab(voc) {
+        coarseDistanceMap(new CoarseDistanceMap(wG[0], hG[0])),
+        coarseTracker(new CoarseTracker(wG[0], hG[0])),
+        coarseTracker_forNewKF(new CoarseTracker(wG[0], hG[0])),
+        coarseInitializer(new CoarseInitializer(wG[0], hG[0])),
+        ef(new EnergyFunctional()),
+        Hcalib(new Camera(fxG[0], fyG[0], cxG[0], cyG[0])),
+        globalMap(new Map(this)),
+        vocab(voc) {
 
         LOG(INFO) << "This is Direct Sparse Odometry, a fully direct VO proposed by TUM vision group."
-                     "For more information about dso, see Direct Sparse Odometry, J. Engel, V. Koltun, "
-                     "D. Cremers, In arXiv:1607.02565, 2016. For loop closing part, see "
-                     "LDSO: Direct Sparse Odometry with Loop Closure, X. Gao, R. Wang, N. Demmel, D. Cremers, "
-                     "In International Conference on Intelligent Robots and Systems (IROS), 2018 " << endl;
+            "For more information about dso, see Direct Sparse Odometry, J. Engel, V. Koltun, "
+            "D. Cremers, In arXiv:1607.02565, 2016. For loop closing part, see "
+            "LDSO: Direct Sparse Odometry with Loop Closure, X. Gao, R. Wang, N. Demmel, D. Cremers, "
+            "In International Conference on Intelligent Robots and Systems (IROS), 2018 " << endl;
 
         Hcalib->CreateCH(Hcalib);
         lastCoarseRMSE.setConstant(100);
@@ -52,7 +52,6 @@ namespace ldso {
         } else {
             LOG(INFO) << "loop closing is disabled" << endl;
         }
-
 
     }
 
@@ -188,7 +187,7 @@ namespace ldso {
 
         // try a lot of pose values and see which is the best
         std::vector<SE3, Eigen::aligned_allocator<SE3>>
-                lastF_2_fh_tries;
+            lastF_2_fh_tries;
         if (allFrameHistory.size() == 2)
             for (unsigned int i = 0; i < lastF_2_fh_tries.size(); i++)  // TODO: maybe wrong, size is obviously zero
                 lastF_2_fh_tries.push_back(SE3());  // use identity
@@ -215,7 +214,7 @@ namespace ldso {
             lastF_2_fh_tries.push_back(fh_2_slast.inverse() * fh_2_slast.inverse() *
                                        lastF_2_slast);    // assume double motion (frame skipped)
             lastF_2_fh_tries.push_back(
-                    SE3::exp(fh_2_slast.log() * 0.5).inverse() * lastF_2_slast); // assume half motion.
+                SE3::exp(fh_2_slast.log() * 0.5).inverse() * lastF_2_slast); // assume half motion.
             lastF_2_fh_tries.push_back(lastF_2_slast); // assume zero motion.
             lastF_2_fh_tries.push_back(SE3()); // assume zero motion FROM KF.
 
@@ -329,9 +328,9 @@ namespace ldso {
 
             // use coarse tracker to solve the iteration
             bool trackingIsGood = coarseTracker->trackNewestCoarse(
-                    fh, lastF_2_fh_this, aff_g2l_this,
-                    pyrLevelsUsed - 1,
-                    achievedRes);    // in each level has to be at least as good as the last try.
+                fh, lastF_2_fh_this, aff_g2l_this,
+                pyrLevelsUsed - 1,
+                achievedRes);    // in each level has to be at least as good as the last try.
             tryIterations++;
 
             // do we have a new winner?
@@ -441,7 +440,7 @@ namespace ldso {
 
                     // add new residuals into this point hessian
                     shared_ptr<PointFrameResidual> r(
-                            new PointFrameResidual(ph, fh1, fh));    // residual from fh1 to fh
+                        new PointFrameResidual(ph, fh1, fh));    // residual from fh1 to fh
 
                     r->setState(ResState::IN);
                     ph->residuals.push_back(r);
@@ -505,10 +504,10 @@ namespace ldso {
         ef->dropPointsF();
 
         getNullspaces(
-                ef->lastNullspaces_pose,
-                ef->lastNullspaces_scale,
-                ef->lastNullspaces_affA,
-                ef->lastNullspaces_affB);
+            ef->lastNullspaces_pose,
+            ef->lastNullspaces_scale,
+            ef->lastNullspaces_affA,
+            ef->lastNullspaces_affB);
 
         ef->marginalizePointsF();
 
@@ -620,7 +619,7 @@ namespace ldso {
         // remove this frame from recorded frames
         frame->ReleaseAll();    // release all things in this frame
         deleteOutOrder<shared_ptr<Frame>>
-                (frames, frame);
+            (frames, frame);
 
         // reset the optimization idx
         for (unsigned int i = 0; i < frames.size(); i++)
@@ -1140,8 +1139,8 @@ namespace ldso {
         // this will actually turn immature points into point hessians
         if (multiThreading) {
             threadReduce.reduce(
-                    bind(&FullSystem::activatePointsMT_Reductor, this, &optimized, &toOptimize, _1, _2, _3, _4), 0,
-                    toOptimize.size(), 50);
+                bind(&FullSystem::activatePointsMT_Reductor, this, &optimized, &toOptimize, _1, _2, _3, _4), 0,
+                toOptimize.size(), 50);
         } else {
             activatePointsMT_Reductor(&optimized, &toOptimize, 0, toOptimize.size(), 0, 0);
         }
@@ -1172,9 +1171,9 @@ namespace ldso {
     }
 
     void FullSystem::activatePointsMT_Reductor(
-            std::vector<shared_ptr<PointHessian>> *optimized,
-            std::vector<shared_ptr<ImmaturePoint>> *toOptimize,
-            int min, int max, Vec10 *stats, int tid) {
+        std::vector<shared_ptr<PointHessian>> *optimized,
+        std::vector<shared_ptr<ImmaturePoint>> *toOptimize,
+        int min, int max, Vec10 *stats, int tid) {
 
         vector<shared_ptr<ImmaturePointTemporaryResidual>> tr(frames.size(), nullptr);
 
@@ -1192,7 +1191,7 @@ namespace ldso {
 
         assert(EFIndicesValid);
         std::vector<shared_ptr<FrameHessian>>
-                fhsToMargPoints;
+            fhsToMargPoints;
 
         for (int i = 0; i < (int) frames.size(); i++)
             if (frames[i]->frameHessian->flaggedForMarginalization)
@@ -1261,7 +1260,7 @@ namespace ldso {
             for (auto &feat: newFrame->frame->features) {
                 // create a immature point
                 feat->ip = shared_ptr<ImmaturePoint>(
-                        new ImmaturePoint(newFrame->frame, feat, 1, Hcalib->mpCH));
+                    new ImmaturePoint(newFrame->frame, feat, 1, Hcalib->mpCH));
             }
             LOG(INFO) << "new features features created: " << newFrame->frame->features.size() << endl;
         } else if (setting_pointSelection == 0) {
@@ -1277,7 +1276,7 @@ namespace ldso {
 
                     shared_ptr<Feature> feat(new Feature(x, y, newFrame->frame));
                     feat->ip = shared_ptr<ImmaturePoint>(
-                            new ImmaturePoint(newFrame->frame, feat, selectionMap[i], Hcalib->mpCH));
+                        new ImmaturePoint(newFrame->frame, feat, selectionMap[i], Hcalib->mpCH));
                     if (!std::isfinite(feat->ip->energyTH)) {
                         feat->ReleaseAll();
                         continue;
@@ -1295,7 +1294,7 @@ namespace ldso {
                 int y = rng.uniform(20, hG[0] - 20);
                 shared_ptr<Feature> feat(new Feature(x, y, newFrame->frame));
                 feat->ip = shared_ptr<ImmaturePoint>(
-                        new ImmaturePoint(newFrame->frame, feat, 1, Hcalib->mpCH));
+                    new ImmaturePoint(newFrame->frame, feat, 1, Hcalib->mpCH));
                 if (!std::isfinite(feat->ip->energyTH)) {
                     feat->ReleaseAll();
                     continue;
@@ -1342,7 +1341,7 @@ namespace ldso {
 
             shared_ptr<Feature> feat(new Feature(point->u + 0.5f, point->v + 0.5f, firstFrame->frame));
             feat->ip = shared_ptr<ImmaturePoint>(
-                    new ImmaturePoint(firstFrame->frame, feat, point->my_type, Hcalib->mpCH));
+                new ImmaturePoint(firstFrame->frame, feat, point->my_type, Hcalib->mpCH));
 
             if (!std::isfinite(feat->ip->energyTH)) {
                 feat->ReleaseImmature();
@@ -1415,10 +1414,10 @@ namespace ldso {
 
     void FullSystem::solveSystem(int iteration, double lambda) {
         ef->lastNullspaces_forLogging = getNullspaces(
-                ef->lastNullspaces_pose,
-                ef->lastNullspaces_scale,
-                ef->lastNullspaces_affA,
-                ef->lastNullspaces_affB);
+            ef->lastNullspaces_pose,
+            ef->lastNullspaces_scale,
+            ef->lastNullspaces_affA,
+            ef->lastNullspaces_affB);
         ef->solveSystemF(iteration, lambda, Hcalib->mpCH);
     }
 
@@ -1429,14 +1428,14 @@ namespace ldso {
         double num = 0;
 
         std::vector<shared_ptr<PointFrameResidual>>
-                toRemove[NUM_THREADS];
+            toRemove[NUM_THREADS];
         for (int i = 0; i < NUM_THREADS; i++)
             toRemove[i].clear();
 
         if (multiThreading) {
             threadReduce.reduce(
-                    bind(&FullSystem::linearizeAll_Reductor, this, fixLinearization, toRemove, _1, _2, _3, _4),
-                    0, activeResiduals.size(), 0);
+                bind(&FullSystem::linearizeAll_Reductor, this, fixLinearization, toRemove, _1, _2, _3, _4),
+                0, activeResiduals.size(), 0);
             lastEnergyP = threadReduce.stats[0];
         } else {
             Vec10 stats;
@@ -1475,32 +1474,32 @@ namespace ldso {
     }
 
     void FullSystem::linearizeAll_Reductor(
-            bool fixLinearization, std::vector<shared_ptr<PointFrameResidual>>
+        bool fixLinearization, std::vector<shared_ptr<PointFrameResidual>>
 
     *toRemove,
-            int min,
-            int max, Vec10
-            *stats,
-            int tid
+        int min,
+        int max, Vec10
+        *stats,
+        int tid
     ) {
 
         for (
-                int k = min;
-                k < max;
-                k++) {
+            int k = min;
+            k < max;
+            k++) {
             shared_ptr<PointFrameResidual> r = activeResiduals[k];
             (*stats)[0] += r->
-                    linearize(Hcalib
-                                      ->mpCH);
+                linearize(Hcalib
+                              ->mpCH);
 
             if (fixLinearization) {
                 r->applyRes(true);
 
                 if (r->
 
-                        isActive()
+                    isActive()
 
-                        ) {
+                    ) {
                     if (r->isNew) {
                         shared_ptr<PointHessian> p = r->point.lock();
                         shared_ptr<FrameHessian> host = r->host.lock();
@@ -1513,13 +1512,13 @@ namespace ldso {
                                               (ptp.head<2>() / ptp[2])).norm();    // 0.01 = one pixel.
                         if (relBS > p->maxRelBaseline)
                             p->
-                                    maxRelBaseline = relBS;
+                                maxRelBaseline = relBS;
 
                         p->numGoodResiduals++;
                     }
                 } else {
                     toRemove[tid].
-                            push_back(activeResiduals[k]);
+                        push_back(activeResiduals[k]);
                 }
             }
         }
@@ -1532,7 +1531,6 @@ namespace ldso {
         pstepfac.segment<3>(0).setConstant(stepfacT);
         pstepfac.segment<3>(3).setConstant(stepfacR);
         pstepfac.segment<4>(6).setConstant(stepfacA);
-
 
         float sumA = 0, sumB = 0, sumT = 0, sumR = 0, sumID = 0, numID = 0;
 
@@ -1962,5 +1960,4 @@ namespace ldso {
 
         LOG(INFO) << "done." << endl;
     }
-
 }
