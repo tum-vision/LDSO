@@ -89,7 +89,7 @@ void settingsDefault(int preset) {
                "- 4-6 active frames\n"
                "- 1-4 LM iteration each KF\n"
                "- 424 x 320 image resolution\n",
-               preset == 0 ? "no " : "5x"); // preset cannot be zero, maybe wrong
+               preset == 2 ? "no " : "5x");
 
         playbackSpeed = (preset == 2 ? 0 : 5);
         setting_desiredImmatureDensity = 600;
