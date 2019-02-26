@@ -43,25 +43,8 @@ bool prefetch = false;
 float playbackSpeed = 1;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
-bool firstRosSpin = false;
 
 using namespace ldso;
-
-void my_exit_handler(int s) {
-    printf("Caught signal %d\n", s);
-    exit(1);
-}
-
-void exitThread() {
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = my_exit_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
-
-    firstRosSpin = true;
-    while (true) pause();
-}
 
 void settingsDefault(int preset) {
     printf("\n=============== PRESET Settings: ===============\n");
@@ -291,9 +274,6 @@ int main(int argc, char **argv) {
     setting_photometricCalibration = 0;
     setting_affineOptModeA = 0; //-1: fix. >=0: optimize (with prior, if > 0).
     setting_affineOptModeB = 0; //-1: fix. >=0: optimize (with prior, if > 0).
-
-    // hook crtl+C.
-    thread exThread = thread(exitThread);
 
     shared_ptr<ImageFolderReader> reader(
             new ImageFolderReader(ImageFolderReader::KITTI, source, calib, "", ""));    // no gamma and vignette

@@ -36,24 +36,9 @@ bool prefetch = false;
 float playbackSpeed = 0;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
-bool firstRosSpin = false;
 
 using namespace ldso;
 
-void my_exit_handler(int s) {
-    printf("Caught signal %d\n", s);
-    exit(1);
-}
-void exitThread() {
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = my_exit_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
-
-    firstRosSpin = true;
-    while (true) pause();
-}
 void settingsDefault(int preset) {
     printf("\n=============== PRESET Settings: ===============\n");
     if (preset == 0 || preset == 1) {
@@ -307,9 +292,6 @@ int main(int argc, char **argv) {
     if (setting_showLoopClosing) {
         LOG(WARNING) << "show loop closing results. The program will be paused when any loop is found" << endl;
     }
-
-    // hook crtl+C.
-    thread exThread = thread(exitThread);
 
     shared_ptr<ImageFolderReader> reader(
             new ImageFolderReader(ImageFolderReader::TUM_MONO, source, calib, gammaCalib, vignette));
