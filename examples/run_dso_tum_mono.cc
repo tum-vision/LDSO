@@ -424,7 +424,6 @@ int main(int argc, char **argv) {
         }
 
         fullSystem->blockUntilMappingIsFinished();
-        sleep(10);
 
         clock_t ended = clock();
         struct timeval tv_end;
