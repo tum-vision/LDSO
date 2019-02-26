@@ -382,14 +382,17 @@ namespace ldso {
     }
 
     void FullSystem::blockUntilMappingIsFinished() {
-        unique_lock<mutex> lock(trackMapSyncMutex);
-        runMapping = false;
-        trackedFrameSignal.notify_all();
-        lock.unlock();
-
-        if (mappingThread.joinable()) {
-            mappingThread.join();
+        {
+            unique_lock<mutex> lock(trackMapSyncMutex);
+            if (!runMapping) {
+                // mapping is already finished, no need to finish again
+                return;
+            }
+            runMapping = false;
+            trackedFrameSignal.notify_all();
         }
+
+        mappingThread.join();
 
         if (setting_enableLoopClosing)
             loopClosing->SetFinish(true);
