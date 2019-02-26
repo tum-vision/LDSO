@@ -396,6 +396,11 @@ namespace ldso {
 
         if (setting_enableLoopClosing)
             loopClosing->SetFinish(true);
+
+        // Update world points in case optimization hasn't run (with all keyframes)
+        // It would maybe be better if the 3d points would always be updated as soon
+        // as the poses or depths are updated (no matter if in PGO or in sliding window BA)
+        globalMap->UpdateAllWorldPoints();
     }
 
     void FullSystem::makeKeyFrame(shared_ptr<FrameHessian> fh) {

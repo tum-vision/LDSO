@@ -45,6 +45,17 @@ namespace ldso {
         return true;
     }
 
+    void Map::UpdateAllWorldPoints() {
+        unique_lock<mutex> lock(mutexPoseGraph);
+        for (shared_ptr<Frame> frame: frames) {
+            for (auto &feat: frame->features) {
+                if (feat->point) {
+                    feat->point->ComputeWorldPos();
+                }
+            }
+        }
+    }
+
     void Map::runPoseGraphOptimization() {
 
         LOG(INFO) << "start pose graph thread!" << endl;
