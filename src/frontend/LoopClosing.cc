@@ -200,7 +200,7 @@ namespace ldso {
             }
 
             cv::Mat R, t;
-            cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0.99, inliers);
+            cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0, inliers);
             int cntInliers = 0;
 
             vector<Match> inlierMatches;
