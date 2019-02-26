@@ -31,7 +31,7 @@ std::string calib = "./examples/EUROC/EUROC.txt";
 std::string vocPath = "./vocab/orbvoc.dbow3";
 
 int startIdx = 0;
-int endIdx = 10000;
+int endIdx = 100000;
 
 double rescale = 1;
 bool reversePlay = false;
