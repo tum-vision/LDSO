@@ -1339,7 +1339,7 @@ namespace ldso {
                   << ", have " << coarseInitializer->numPoints[0] << ")!" << endl;
 
         // Create features in the first frame.
-        for (size_t i = 0; i < coarseInitializer->numPoints[0]; i++) {
+        for (size_t i = 0; i < size_t(coarseInitializer->numPoints[0]); i++) {
 
             if (rand() / (float) RAND_MAX > keepPercentage)
                 continue;
@@ -1839,7 +1839,7 @@ namespace ldso {
                     }
                 }
             } else {
-                if (setting_realTimeMaxKF || needNewKFAfter >= frames.back()->id) {
+                if (setting_realTimeMaxKF || needNewKFAfter >= int(frames.back()->id)) {
                     lock.unlock();
                     makeKeyFrame(fh);
                     needToKetchupMapping = false;
@@ -1884,7 +1884,7 @@ namespace ldso {
         }
 
         int i = 0;
-        while (!fin.eof() && i < allKFs.size()) {
+        while (!fin.eof() && i < int(allKFs.size())) {
             shared_ptr<Frame> &newFrame = allKFs[i];
             newFrame->load(fin, newFrame, allKFs);
             i++;

@@ -108,7 +108,7 @@ namespace ldso {
         candidateKF = checkedKFs[r.Id];
 
         auto connected = frame->GetConnectedKeyFrames();
-        int minKFId = 9999, maxKFId = 0;
+        unsigned long minKFId = 9999999, maxKFId = 0;
 
         for (auto &kf: connected) {
             if (kf->kfId < minKFId)
@@ -204,7 +204,7 @@ namespace ldso {
             int cntInliers = 0;
 
             vector<Match> inlierMatches;
-            for (size_t k = 0; k < inliers.rows; k++) {
+            for (int k = 0; k < inliers.rows; k++) {
                 inlierMatches.push_back(matches[matchIdx[inliers.at<int>(k, 0)]]);
                 cntInliers++;
             }
