@@ -114,8 +114,9 @@ namespace ldso {
         }
 
         // configurations
-        float minScoreTH = 0.05;
-        float minDistance = 10;
+        // unused?
+        //float minScoreTH = 0.05;
+        //float minDistance = 10;
 
         // static data
         std::vector<int> umax;  // used to compute rotation
