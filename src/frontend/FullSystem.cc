@@ -386,7 +386,10 @@ namespace ldso {
         runMapping = false;
         trackedFrameSignal.notify_all();
         lock.unlock();
-        mappingThread.join();
+
+        if (mappingThread.joinable()) {
+            mappingThread.join();
+        }
 
         if (setting_enableLoopClosing)
             loopClosing->SetFinish(true);
