@@ -1791,7 +1791,7 @@ namespace ldso {
                 a,
                 b
         );
-        LOG(INFO) << string(buff) << endl;
+        LOG(INFO) << string(buff);
     }
 
     void FullSystem::mappingLoop() {
@@ -1803,8 +1803,9 @@ namespace ldso {
             // wait an unmapped frame
             while (unmappedTrackedFrames.size() == 0) {
                 trackedFrameSignal.wait(lock);
-                if (!runMapping) return;
+                if (!runMapping) break;
             }
+            if (!runMapping) break;
 
             // get an unmapped frame, tackle it.
             shared_ptr<Frame> fr = unmappedTrackedFrames.front();

@@ -176,7 +176,7 @@ void parseArgument(char *arg) {
     }
     if (1 == sscanf(arg, "end=%d", &option)) {
         endIdx = option;
-        printf("END AT %d!\n", startIdx);
+        printf("END AT %d!\n", endIdx);
         return;
     }
     if (1 == sscanf(arg, "loopclosing=%d", &option)) {
@@ -185,7 +185,7 @@ void parseArgument(char *arg) {
         } else {
             setting_enableLoopClosing = false;
         }
-        printf("END AT %d!\n", startIdx);
+        printf("Loopclosing %s!\n", setting_enableLoopClosing ? "enabled" : "disabled");
         return;
     }
 

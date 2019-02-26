@@ -245,6 +245,7 @@ void parseArgument(char *arg) {
         } else {
             setting_enableLoopClosing = false;
         }
+        printf("Loopclosing %s!\n", setting_enableLoopClosing ? "enabled" : "disabled");
         return;
     }
 

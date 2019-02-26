@@ -79,7 +79,7 @@ namespace ldso {
 
         inline const VecX getOriginalParameter() const { return parsOrg; };
 
-        inline const Eigen::Vector2i getOriginalSize() { return Eigen::Vector2i(wOrg, hOrg); };
+        inline const Eigen::Vector2i getOriginalSize() const { return Eigen::Vector2i(wOrg, hOrg); };
 
         inline bool isValid() { return valid; };
 
