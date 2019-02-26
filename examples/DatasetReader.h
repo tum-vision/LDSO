@@ -273,7 +273,7 @@ private:
             if (line[0] == '#')
                 continue;
 
-            if (2 == sscanf(buf, "%lf,%s", &stamp, &filename)) {
+            if (2 == sscanf(buf, "%lf,%s", &stamp, filename)) {
                 timestamps.push_back(stamp * 1e-9);
                 files.push_back(path + "/data/" + string(filename));
             }

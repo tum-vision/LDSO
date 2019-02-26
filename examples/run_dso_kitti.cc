@@ -245,7 +245,7 @@ void parseArgument(char *arg) {
         return;
     }
 
-    if (1 == sscanf(arg, "output=%s", &buf)) {
+    if (1 == sscanf(arg, "output=%s", buf)) {
         output_file = buf;
         LOG(INFO) << "output set to " << output_file << endl;
         return;
