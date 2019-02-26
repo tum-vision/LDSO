@@ -333,7 +333,9 @@ namespace ldso {
 
     PangolinDSOViewer::~PangolinDSOViewer() {
         close();
-        runThread.join();
+        if (runThread.joinable()) {
+            runThread.join();
+        }
     }
 
     void PangolinDSOViewer::run() {
@@ -571,7 +573,7 @@ namespace ldso {
         }
 
         printf("QUIT Pangolin thread!\n");
-        printf("I'll just kill the whole process.\nSo Long, and Thanks for All the Fish!\n");
+        printf("So Long, and Thanks for All the Fish!\n");
     }
 
     void PangolinDSOViewer::close() {
