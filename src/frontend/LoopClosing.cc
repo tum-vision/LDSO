@@ -108,7 +108,7 @@ namespace ldso {
         candidateKF = checkedKFs[r.Id];
 
         auto connected = frame->GetConnectedKeyFrames();
-        int minKFId = 9999, maxKFId = 0;
+        unsigned long minKFId = 9999999, maxKFId = 0;
 
         for (auto &kf: connected) {
             if (kf->kfId < minKFId)
@@ -179,7 +179,8 @@ namespace ldso {
                 if (featKF->status == Feature::FeatureStatus::VALID &&
                     featKF->point->status != Point::PointStatus::OUTLIER) {
                     // there should be a 3d point
-                    shared_ptr<Point> &pt = featKF->point;
+                    // pt unused?
+                    //shared_ptr<Point> &pt = featKF->point;
                     // compute 3d pos in ref
                     Vec3f pt3 = (1.0 / featKF->invD) * Vec3f(
                             Hcalib->fxli() * (featKF->uv[0] - Hcalib->cxl()),
@@ -199,11 +200,11 @@ namespace ldso {
             }
 
             cv::Mat R, t;
-            cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0.99, inliers);
+            cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0, inliers);
             int cntInliers = 0;
 
             vector<Match> inlierMatches;
-            for (size_t k = 0; k < inliers.rows; k++) {
+            for (int k = 0; k < inliers.rows; k++) {
                 inlierMatches.push_back(matches[matchIdx[inliers.at<int>(k, 0)]]);
                 cntInliers++;
             }
@@ -243,7 +244,7 @@ namespace ldso {
             if (setting_showLoopClosing && success) {
                 LOG(INFO) << "please see loop closing between " << currentKF->kfId << " and " << pKF->kfId << endl;
                 setting_pause = true;
-                int c = matcher.DrawMatches(currentKF, pKF, inlierMatches);
+                matcher.DrawMatches(currentKF, pKF, inlierMatches);
                 setting_pause = false;
             }
 
@@ -264,7 +265,8 @@ namespace ldso {
 
         VecVec2 activePixels;
         // NOTE these residuals are not locked!
-        SE3 Tcw = currentKF->getPose();
+        // tcw unused?
+        //SE3 Tcw = currentKF->getPose();
         for (shared_ptr<Frame> fh: activeFrames) {
             if (fh == currentKF) continue;
             for (shared_ptr<Feature> feat: fh->features) {

@@ -31,29 +31,14 @@ double rescale = 1;
 bool reversePlay = false;
 bool disableROS = false;
 int startIdx = 0;
-int endIdx = 400;
+int endIdx = 100000;
 bool prefetch = false;
 float playbackSpeed = 0;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
-bool firstRosSpin = false;
 
 using namespace ldso;
 
-void my_exit_handler(int s) {
-    printf("Caught signal %d\n", s);
-    exit(1);
-}
-void exitThread() {
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = my_exit_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
-
-    firstRosSpin = true;
-    while (true) pause();
-}
 void settingsDefault(int preset) {
     printf("\n=============== PRESET Settings: ===============\n");
     if (preset == 0 || preset == 1) {
@@ -83,7 +68,7 @@ void settingsDefault(int preset) {
                "- 4-6 active frames\n"
                "- 1-4 LM iteration each KF\n"
                "- 424 x 320 image resolution\n",
-               preset == 0 ? "no " : "5x"); // preset cannot be zero, maybe wrong
+               preset == 2 ? "no " : "5x");
 
         playbackSpeed = (preset == 2 ? 0 : 5);
         preload = preset == 3;
@@ -191,7 +176,7 @@ void parseArgument(char *arg) {
     }
     if (1 == sscanf(arg, "end=%d", &option)) {
         endIdx = option;
-        printf("END AT %d!\n", startIdx);
+        printf("END AT %d!\n", endIdx);
         return;
     }
     if (1 == sscanf(arg, "loopclosing=%d", &option)) {
@@ -200,7 +185,7 @@ void parseArgument(char *arg) {
         } else {
             setting_enableLoopClosing = false;
         }
-        printf("END AT %d!\n", startIdx);
+        printf("Loopclosing %s!\n", setting_enableLoopClosing ? "enabled" : "disabled");
         return;
     }
 
@@ -246,7 +231,7 @@ void parseArgument(char *arg) {
         return;
     }
 
-    if (1 == sscanf(arg, "output=%s", &buf)) {
+    if (1 == sscanf(arg, "output=%s", buf)) {
         output_file = buf;
         LOG(INFO) << "output set to " << output_file << endl;
         return;
@@ -307,9 +292,6 @@ int main(int argc, char **argv) {
     if (setting_showLoopClosing) {
         LOG(WARNING) << "show loop closing results. The program will be paused when any loop is found" << endl;
     }
-
-    // hook crtl+C.
-    thread exThread = thread(exitThread);
 
     shared_ptr<ImageFolderReader> reader(
             new ImageFolderReader(ImageFolderReader::TUM_MONO, source, calib, gammaCalib, vignette));
@@ -442,7 +424,6 @@ int main(int argc, char **argv) {
         }
 
         fullSystem->blockUntilMappingIsFinished();
-        sleep(10);
 
         clock_t ended = clock();
         struct timeval tv_end;

@@ -98,8 +98,9 @@ namespace ldso {
 
             float lambda = 0.01;
 
-            Vec2f relAff = AffLight::fromToVecExposure(lastRef->ab_exposure, newFrame->ab_exposure, lastRef_aff_g2l,
-                                                       aff_g2l_current).cast<float>();
+            // relAff no used?
+            //Vec2f relAff = AffLight::fromToVecExposure(lastRef->ab_exposure, newFrame->ab_exposure, lastRef_aff_g2l,
+            //                                           aff_g2l_current).cast<float>();
 
             // L-M iteration
             for (int iteration = 0; iteration < maxIterations[lvl]; iteration++) {
@@ -158,8 +159,9 @@ namespace ldso {
                 // res[0]/res[1] is the average energy
                 bool accept = (resNew[0] / resNew[1]) < (resOld[0] / resOld[1]);
 
-                Vec2f relAff = AffLight::fromToVecExposure(lastRef->ab_exposure, newFrame->ab_exposure,
-                                                           lastRef_aff_g2l, aff_g2l_new).cast<float>();
+                // relAff no used?
+                //Vec2f relAff = AffLight::fromToVecExposure(lastRef->ab_exposure, newFrame->ab_exposure,
+                //                                           lastRef_aff_g2l, aff_g2l_new).cast<float>();
                 if (accept) {
 
                     // decrease lambda

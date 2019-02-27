@@ -70,6 +70,8 @@ namespace ldso {
 
         virtual void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const = 0;
 
+        virtual const char* getCameraModelType() const = 0;
+
 
         inline const Mat33 getK() const { return K; };
 
@@ -77,7 +79,7 @@ namespace ldso {
 
         inline const VecX getOriginalParameter() const { return parsOrg; };
 
-        inline const Eigen::Vector2i getOriginalSize() { return Eigen::Vector2i(wOrg, hOrg); };
+        inline const Eigen::Vector2i getOriginalSize() const { return Eigen::Vector2i(wOrg, hOrg); };
 
         inline bool isValid() { return valid; };
 
@@ -122,6 +124,7 @@ namespace ldso {
 
         void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
 
+        inline const char* getCameraModelType() const override { return "FOV"; }
     };
 
     class UndistortRadTan : public Undistort {
@@ -134,6 +137,7 @@ namespace ldso {
 
         void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
 
+        inline const char* getCameraModelType() const override { return "RadTan"; }
     };
 
     class UndistortEquidistant : public Undistort {
@@ -146,6 +150,7 @@ namespace ldso {
 
         void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
 
+        inline const char* getCameraModelType() const override { return "Equidistant"; }
     };
 
     class UndistortPinhole : public Undistort {
@@ -157,6 +162,8 @@ namespace ldso {
         ~UndistortPinhole();
 
         void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
+
+        inline const char* getCameraModelType() const override { return "Pinhole"; }
 
     private:
         float inputCalibration[8];
@@ -172,6 +179,7 @@ namespace ldso {
 
         void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
 
+        inline const char* getCameraModelType() const override { return "KB"; }
     };
 }
 

@@ -34,7 +34,7 @@ std::string calib = "./examples/Kitti/Kitti00-02.txt";
 std::string vocPath = "./vocab/orbvoc.dbow3";
 
 int startIdx = 0;
-int endIdx = 10000;
+int endIdx = 100000;
 
 double rescale = 1;
 bool reversePlay = false;
@@ -43,25 +43,8 @@ bool prefetch = false;
 float playbackSpeed = 1;    // 0 for linearize (play as fast as possible, while sequentializing tracking & mapping). otherwise, factor on timestamps.
 bool preload = false;
 bool useSampleOutput = false;
-bool firstRosSpin = false;
 
 using namespace ldso;
-
-void my_exit_handler(int s) {
-    printf("Caught signal %d\n", s);
-    exit(1);
-}
-
-void exitThread() {
-    struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = my_exit_handler;
-    sigemptyset(&sigIntHandler.sa_mask);
-    sigIntHandler.sa_flags = 0;
-    sigaction(SIGINT, &sigIntHandler, NULL);
-
-    firstRosSpin = true;
-    while (true) pause();
-}
 
 void settingsDefault(int preset) {
     printf("\n=============== PRESET Settings: ===============\n");
@@ -91,7 +74,7 @@ void settingsDefault(int preset) {
                "- 4-6 active frames\n"
                "- 1-4 LM iteration each KF\n"
                "- 424 x 320 image resolution\n",
-               preset == 0 ? "no " : "5x"); // preset cannot be zero, maybe wrong
+               preset == 2 ? "no " : "5x");
 
         playbackSpeed = (preset == 2 ? 0 : 5);
         setting_desiredImmatureDensity = 600;
@@ -168,7 +151,7 @@ void parseArgument(char *arg) {
         } else {
             setting_enableLoopClosing = false;
         }
-        printf("END AT %d!\n", startIdx);
+        printf("Loopclosing %s!\n", setting_enableLoopClosing ? "enabled" : "disabled");
         return;
     }
 
@@ -216,7 +199,7 @@ void parseArgument(char *arg) {
     }
     if (1 == sscanf(arg, "end=%d", &option)) {
         endIdx = option;
-        printf("END AT %d!\n", startIdx);
+        printf("END AT %d!\n", endIdx);
         return;
     }
 
@@ -262,7 +245,7 @@ void parseArgument(char *arg) {
         return;
     }
 
-    if (1 == sscanf(arg, "output=%s", &buf)) {
+    if (1 == sscanf(arg, "output=%s", buf)) {
         output_file = buf;
         LOG(INFO) << "output set to " << output_file << endl;
         return;
@@ -291,9 +274,6 @@ int main(int argc, char **argv) {
     setting_photometricCalibration = 0;
     setting_affineOptModeA = 0; //-1: fix. >=0: optimize (with prior, if > 0).
     setting_affineOptModeB = 0; //-1: fix. >=0: optimize (with prior, if > 0).
-
-    // hook crtl+C.
-    thread exThread = thread(exitThread);
 
     shared_ptr<ImageFolderReader> reader(
             new ImageFolderReader(ImageFolderReader::KITTI, source, calib, "", ""));    // no gamma and vignette

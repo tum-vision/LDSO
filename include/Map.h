@@ -43,6 +43,9 @@ namespace ldso {
          */
         bool OptimizeALLKFs();
 
+        /// update the cached 3d position of all points.
+        void UpdateAllWorldPoints();
+
         /**
          * get number of frames stored in global map
          * @return

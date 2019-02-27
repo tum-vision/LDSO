@@ -30,13 +30,20 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 # required libs
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
+if(OpenCV_VERSION VERSION_LESS 3)
+  add_definitions(-DLDSO_OPENCV2)
+endif()
 find_package(Glog REQUIRED)
 find_package(Pangolin REQUIRED)
 
 # optional libs
 find_package(LibZip QUIET)
 
-set(CMAKE_CXX_FLAGS "-Wall -Wno-deprecated -march=native -Wno-duplicate-decl-specifier -Wno-ignored-qualifiers -Wno-reorder -pthread")
+set(CMAKE_CXX_FLAGS "-Wall -Wno-deprecated -march=native -Wno-duplicate-decl-specifier -Wno-ignored-qualifiers -Wno-reorder -Wno-missing-braces")
+
+if(NOT APPLE)
+    set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+endif()
 
 # decide if we have ziplib.
 if (LIBZIP_LIBRARY)

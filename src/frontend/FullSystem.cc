@@ -382,14 +382,25 @@ namespace ldso {
     }
 
     void FullSystem::blockUntilMappingIsFinished() {
-        unique_lock<mutex> lock(trackMapSyncMutex);
-        runMapping = false;
-        trackedFrameSignal.notify_all();
-        lock.unlock();
+        {
+            unique_lock<mutex> lock(trackMapSyncMutex);
+            if (!runMapping) {
+                // mapping is already finished, no need to finish again
+                return;
+            }
+            runMapping = false;
+            trackedFrameSignal.notify_all();
+        }
+
         mappingThread.join();
 
         if (setting_enableLoopClosing)
             loopClosing->SetFinish(true);
+
+        // Update world points in case optimization hasn't run (with all keyframes)
+        // It would maybe be better if the 3d points would always be updated as soon
+        // as the poses or depths are updated (no matter if in PGO or in sliding window BA)
+        globalMap->UpdateAllWorldPoints();
     }
 
     void FullSystem::makeKeyFrame(shared_ptr<FrameHessian> fh) {
@@ -1333,7 +1344,7 @@ namespace ldso {
                   << ", have " << coarseInitializer->numPoints[0] << ")!" << endl;
 
         // Create features in the first frame.
-        for (size_t i = 0; i < coarseInitializer->numPoints[0]; i++) {
+        for (size_t i = 0; i < size_t(coarseInitializer->numPoints[0]); i++) {
 
             if (rand() / (float) RAND_MAX > keepPercentage)
                 continue;
@@ -1785,7 +1796,7 @@ namespace ldso {
                 a,
                 b
         );
-        LOG(INFO) << string(buff) << endl;
+        LOG(INFO) << string(buff);
     }
 
     void FullSystem::mappingLoop() {
@@ -1797,8 +1808,9 @@ namespace ldso {
             // wait an unmapped frame
             while (unmappedTrackedFrames.size() == 0) {
                 trackedFrameSignal.wait(lock);
-                if (!runMapping) return;
+                if (!runMapping) break;
             }
+            if (!runMapping) break;
 
             // get an unmapped frame, tackle it.
             shared_ptr<Frame> fr = unmappedTrackedFrames.front();
@@ -1833,7 +1845,7 @@ namespace ldso {
                     }
                 }
             } else {
-                if (setting_realTimeMaxKF || needNewKFAfter >= frames.back()->id) {
+                if (setting_realTimeMaxKF || needNewKFAfter >= int(frames.back()->id)) {
                     lock.unlock();
                     makeKeyFrame(fh);
                     needToKetchupMapping = false;
@@ -1878,7 +1890,7 @@ namespace ldso {
         }
 
         int i = 0;
-        while (!fin.eof() && i < allKFs.size()) {
+        while (!fin.eof() && i < int(allKFs.size())) {
             shared_ptr<Frame> &newFrame = allKFs[i];
             newFrame->load(fin, newFrame, allKFs);
             i++;

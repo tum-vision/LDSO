@@ -16,6 +16,7 @@ results/*
 evaluation/results/
 evaluation/matlab-evaluation/**/*.mat
 /results.txt*
+/pointcloud.ply
 
 # python
 **.pyc
