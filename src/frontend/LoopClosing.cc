@@ -200,7 +200,7 @@ namespace ldso {
             }
 
             cv::Mat R, t;
-#ifdef LDSO_OPENCV2
+#if (defined(CV_VERSION_EPOCH) && CV_VERSION_EPOCH == 2)
             // OpenCV 2 has "minInliers" parameter
             cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0, inliers);
 #else

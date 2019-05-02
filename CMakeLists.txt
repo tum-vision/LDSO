@@ -30,9 +30,6 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 # required libs
 find_package(Eigen3 REQUIRED)
 find_package(OpenCV REQUIRED)
-if(OpenCV_VERSION VERSION_LESS 3)
-  add_definitions(-DLDSO_OPENCV2)
-endif()
 find_package(Glog REQUIRED)
 find_package(Pangolin REQUIRED)
 

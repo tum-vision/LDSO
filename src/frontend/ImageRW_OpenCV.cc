@@ -1,6 +1,8 @@
 #include "frontend/ImageRW.h"
 
-#ifdef LDSO_OPENCV2
+#include <opencv2/core/version.hpp>
+
+#if (defined(CV_VERSION_EPOCH) && CV_VERSION_EPOCH == 2)
 #include <opencv2/highgui/highgui.hpp>
 #else
 #include <opencv2/imgcodecs.hpp>
