@@ -200,7 +200,13 @@ namespace ldso {
             }
 
             cv::Mat R, t;
+#ifdef LDSO_OPENCV2
+            // OpenCV 2 has "minInliers" parameter
             cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0, inliers);
+#else
+            // OpenCV 3 and 4 has "confidence" parameter
+            cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0.99, inliers);
+#endif
             int cntInliers = 0;
 
             vector<Match> inlierMatches;
