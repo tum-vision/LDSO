@@ -26,6 +26,11 @@ namespace ldso {
         }
     }
 
+    void Map::lastOptimizeAllKFs() {
+        framesOpti = frames;
+        currentKF = *frames.rbegin();
+        runPoseGraphOptimization();
+    }
     bool Map::OptimizeALLKFs() {
         {
             unique_lock<mutex> lock(mutexPoseGraph);
@@ -140,8 +145,11 @@ namespace ldso {
         }
 
         poseGraphRunning = false;
+        if (currentKF) {
+            lastkfId = currentKF->kfId;
+        }
 
-        if (fullsystem) fullsystem->RefreshGUI();
+            if (fullsystem) fullsystem->RefreshGUI();
     }
 
 }

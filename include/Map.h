@@ -42,7 +42,7 @@ namespace ldso {
          * @return true if pose graph thread is started
          */
         bool OptimizeALLKFs();
-
+        void lastOptimizeAllKFs();
         /// update the cached 3d position of all points.
         void UpdateAllWorldPoints();
 
@@ -62,6 +62,7 @@ namespace ldso {
 
         set<shared_ptr<Frame>, CmpFrameID> GetAllKFs() { return frames; }
 
+            unsigned long lastkfId = 0;  // keyframe id of this frame
     private:
         // the pose graph optimization thread
         void runPoseGraphOptimization();
