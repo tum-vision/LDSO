@@ -27,10 +27,21 @@ namespace ldso {
     }
 
     void Map::lastOptimizeAllKFs() {
+        LOG(INFO) << "Final pose graph optimization after odometry is finished.";
+
+        {
+            unique_lock<mutex> lock(mutexPoseGraph);
+            if (poseGraphRunning) {
+                LOG(FATAL) << "Should not be called while pose graph optimization is running";
+            }
+        }
+
+        // no locking of mapMutex since we assume that odometry has finished
         framesOpti = frames;
         currentKF = *frames.rbegin();
         runPoseGraphOptimization();
     }
+
     bool Map::OptimizeALLKFs() {
         {
             unique_lock<mutex> lock(mutexPoseGraph);
@@ -145,11 +156,12 @@ namespace ldso {
         }
 
         poseGraphRunning = false;
+
         if (currentKF) {
-            lastkfId = currentKF->kfId;
+            latestOptimizedKfId = currentKF->kfId;
         }
 
-            if (fullsystem) fullsystem->RefreshGUI();
+        if (fullsystem) fullsystem->RefreshGUI();
     }
 
 }

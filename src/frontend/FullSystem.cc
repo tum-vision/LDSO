@@ -400,6 +400,7 @@ namespace ldso {
                 globalMap->lastOptimizeAllKFs();
             }
         }
+
         // Update world points in case optimization hasn't run (with all keyframes)
         // It would maybe be better if the 3d points would always be updated as soon
         // as the poses or depths are updated (no matter if in PGO or in sliding window BA)
@@ -852,7 +853,7 @@ namespace ldso {
             unique_lock<mutex> crlock(shellPoseMutex);
             for (auto fr: frames) {
                 fr->setPose(fr->frameHessian->PRE_camToWorld.inverse());
-                if (fr->kfId >= globalMap->lastkfId) {
+                if (fr->kfId >= globalMap->getLatestOptimizedKfId()) {
                     fr->setPoseOpti(Sim3(fr->getPose().matrix()));
                 }
                 fr->aff_g2l = fr->frameHessian->aff_g2l();
