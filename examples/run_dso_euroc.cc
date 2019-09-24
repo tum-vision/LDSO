@@ -400,6 +400,7 @@ int main(int argc, char **argv) {
 
         // for evaluation, we print the result before loop closing and after loop closing
         fullSystem->printResult(output_file, true);
+        fullSystem->printResult(output_file + ".noloop", false);
 
         int numFramesProcessed = abs(idsToPlay[0] - idsToPlay.back());
         double numSecondsProcessed = fabs(reader->getTimestamp(idsToPlay[0]) - reader->getTimestamp(idsToPlay.back()));
