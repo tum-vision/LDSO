@@ -43,6 +43,9 @@ namespace ldso {
          */
         bool OptimizeALLKFs();
 
+        // optimize pose graph on all kfs after odometry loop is done
+        void lastOptimizeAllKFs();
+
         /// update the cached 3d position of all points.
         void UpdateAllWorldPoints();
 
@@ -62,6 +65,8 @@ namespace ldso {
 
         set<shared_ptr<Frame>, CmpFrameID> GetAllKFs() { return frames; }
 
+        unsigned long getLatestOptimizedKfId() const { return latestOptimizedKfId; }
+
     private:
         // the pose graph optimization thread
         void runPoseGraphOptimization();
@@ -70,6 +75,9 @@ namespace ldso {
         set<shared_ptr<Frame>, CmpFrameID> frames;      // all KFs by ID
         set<shared_ptr<Frame>, CmpFrameID> framesOpti;  // KFs to be optimized
         shared_ptr<Frame> currentKF = nullptr;
+
+        // keyframe id of newest optimized keyframe frame
+        unsigned long latestOptimizedKfId = 0;
 
         bool poseGraphRunning = false;  // is pose graph running?
         mutex mutexPoseGraph;

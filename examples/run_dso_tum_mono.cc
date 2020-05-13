@@ -430,6 +430,7 @@ int main(int argc, char **argv) {
         gettimeofday(&tv_end, NULL);
 
         fullSystem->printResult(output_file, true);
+        fullSystem->printResult(output_file + ".noloop", false);
 
         int numFramesProcessed = abs(idsToPlay[0] - idsToPlay.back());
         double numSecondsProcessed = fabs(reader->getTimestamp(idsToPlay[0]) - reader->getTimestamp(idsToPlay.back()));
