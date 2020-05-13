@@ -51,6 +51,8 @@ namespace ldso {
                 resetOOB();
             }
 
+            virtual ~PointFrameResidual() = default;
+
             /**
              * linearize the reprojection, create jacobian matrices
              * @param HCalib

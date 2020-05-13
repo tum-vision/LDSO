@@ -164,11 +164,11 @@ namespace ldso {
             _error = (_measurement.inverse() * v1 * v2.inverse()).log();
         };
 
-        virtual double initialEstimatePossible(
-                const OptimizableGraph::VertexSet &, OptimizableGraph::Vertex *) { return 1.; }
+        virtual double initialEstimatePossible (
+                const OptimizableGraph::VertexSet &, OptimizableGraph::Vertex *) override { return 1.; }
 
-        virtual void initialEstimate(
-                const OptimizableGraph::VertexSet &from, OptimizableGraph::Vertex * /*to*/) {
+        virtual void initialEstimate  (
+                const OptimizableGraph::VertexSet &from, OptimizableGraph::Vertex * /*to*/) override {
             VertexSim3 *v1 = static_cast<VertexSim3 *>(_vertices[0]);
             VertexSim3 *v2 = static_cast<VertexSim3 *>(_vertices[1]);
             if (from.count(v1) > 0)

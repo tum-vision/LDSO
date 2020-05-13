@@ -122,7 +122,7 @@ namespace ldso {
 
         ~UndistortFOV();
 
-        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
+        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const override;
 
         inline const char* getCameraModelType() const override { return "FOV"; }
     };
@@ -135,7 +135,7 @@ namespace ldso {
 
         ~UndistortRadTan();
 
-        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
+        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const override;
 
         inline const char* getCameraModelType() const override { return "RadTan"; }
     };
@@ -148,7 +148,7 @@ namespace ldso {
 
         ~UndistortEquidistant();
 
-        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
+        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const override;
 
         inline const char* getCameraModelType() const override { return "Equidistant"; }
     };
@@ -161,7 +161,7 @@ namespace ldso {
 
         ~UndistortPinhole();
 
-        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
+        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const override;
 
         inline const char* getCameraModelType() const override { return "Pinhole"; }
 
@@ -177,7 +177,7 @@ namespace ldso {
 
         ~UndistortKB();
 
-        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const;
+        void distortCoordinates(float *in_x, float *in_y, float *out_x, float *out_y, int n) const override;
 
         inline const char* getCameraModelType() const override { return "KB"; }
     };
