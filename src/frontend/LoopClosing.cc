@@ -205,7 +205,15 @@ namespace ldso {
             cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0, inliers);
 #else
             // OpenCV 3 and 4 has "confidence" parameter
-            cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0.99, inliers);
+            try {
+              cv::solvePnPRansac(p3d, p2d, K, cv::Mat(), R, t, false, 100, 8.0, 0.99, inliers);
+            } catch (cv::Exception e) {
+              // After RANSAC number of points may drop below 6 which prevents DLT algorithm to work
+              // This only occurs starting from OpenCV 3, it seems to work fine with OpenCV 2
+              // https://github.com/tum-vision/LDSO/issues/47#issuecomment-605413508
+              LOG(INFO) << "Ransac no inliers from " << p3d.size() << " points" << endl;
+              return false;
+            }
 #endif
             int cntInliers = 0;
 
