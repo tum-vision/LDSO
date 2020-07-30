@@ -25,7 +25,7 @@ std::string gammaCalib = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/pca
 std::string source = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/";
 std::string calib = "/media/gaoxiang/Data1/Dataset/TUM-MONO/sequence_31/camera.txt";
 std::string output_file = "./results.txt";
-std::string vocPath = "./vocab/orbvoc.dbow3";
+std::string vocPath = std::string(REPO_DIR) + "/vocab/orbvoc.dbow3";
 
 double rescale = 1;
 bool reversePlay = false;
