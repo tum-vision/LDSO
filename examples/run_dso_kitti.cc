@@ -30,8 +30,8 @@ using namespace ldso;
 
 std::string source = "/media/Data/Dataset/Kitti/dataset/sequences/00";
 std::string output_file = "./results.txt";
-std::string calib = "./examples/Kitti/Kitti00-02.txt";
-std::string vocPath = "./vocab/orbvoc.dbow3";
+std::string calib = std::string(REPO_DIR) + "/examples/Kitti/Kitti00-02.txt";
+std::string vocPath = std::string(REPO_DIR) + "/vocab/orbvoc.dbow3";
 
 int startIdx = 0;
 int endIdx = 100000;

@@ -179,8 +179,9 @@ namespace g2o {
     for (size_t i=0; i<_parameters.size(); i++){
       int index = _parameterIds[i];
       *_parameters[i] = graph()->parameter(index);
-      if (typeid(**_parameters[i]).name()!=_parameterTypes[i]){
-        cerr << __PRETTY_FUNCTION__ << ": FATAL, parameter type mismatch - encountered " << typeid(**_parameters[i]).name() << "; should be " << _parameterTypes[i] << endl;
+      const auto& ref_parameter = **_parameters[i];
+      if (typeid(ref_parameter).name()!=_parameterTypes[i]){
+        cerr << __PRETTY_FUNCTION__ << ": FATAL, parameter type mismatch - encountered " << typeid(ref_parameter).name() << "; should be " << _parameterTypes[i] << endl;
       }
       if (!*_parameters[i]) {
         cerr << __PRETTY_FUNCTION__ << ": FATAL, *_parameters[i] == 0" << endl;

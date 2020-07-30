@@ -252,16 +252,14 @@ namespace g2o {
 
   void applyAction(HyperGraph* graph, HyperGraphElementAction* action, HyperGraphElementAction::Parameters* params, const std::string& typeName)
   {
-    for (HyperGraph::VertexIDMap::iterator it=graph->vertices().begin(); 
-        it!=graph->vertices().end(); ++it){
-      if ( typeName.empty() || typeid(*it->second).name()==typeName){
-        (*action)(it->second, params);
+    for (const auto& it: graph->vertices()){
+      if ( typeName.empty() || typeid(*it.second).name()==typeName){
+        (*action)(it.second, params);
       }
     }
-    for (HyperGraph::EdgeSet::iterator it=graph->edges().begin(); 
-        it!=graph->edges().end(); ++it){
-      if ( typeName.empty() || typeid(**it).name()==typeName)
-        (*action)(*it, params);
+    for (const auto& it: graph->edges()){
+      if ( typeName.empty() || typeid(*it).name()==typeName)
+        (*action)(it, params);
     }
   }
 

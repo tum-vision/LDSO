@@ -27,8 +27,8 @@ using namespace ldso;
 
 std::string source = "/home/xiang/Dataset/EUROC/MH_01_easy/cam0";
 std::string output_file = "./results.txt";
-std::string calib = "./examples/EUROC/EUROC.txt";
-std::string vocPath = "./vocab/orbvoc.dbow3";
+std::string calib = std::string(REPO_DIR) + "/examples/EUROC/EUROC.txt";
+std::string vocPath = std::string(REPO_DIR) + "/vocab/orbvoc.dbow3";
 
 int startIdx = 0;
 int endIdx = 100000;
